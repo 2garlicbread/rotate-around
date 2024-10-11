@@ -1,0 +1,36 @@
+<h2>clone around circle</h2>
+
+<p>count: <input id="count" type="number" value="32"></p>
+<p>radius: <input id="rad" type="number" value="128"></p>
+<p>offset: <input id="offset" type="number" value="0"></p>
+
+<button id="gen">generate</button>
+<button id="cancel">cancel</button>
+
+<script>
+document.getElementById('gen').onclick = () => {
+    const countInput = document.getElementById('count');
+    const radInput = document.getElementById('rad');
+    const offsetInput = document.getElementById('offset');
+
+    const count = parseInt(countInput.value, 10); // why the fuck is it called radix??!?!?
+    const radius = parseFloat(radInput.value);
+    const radOffset = parseFloat(offsetInput.value);
+    
+
+    parent.postMessage({
+        pluginMessage: {
+            type: 'create',
+            count: count,
+            radius: radius,
+            radOffset: radOffset || 0
+        }
+    }, '*');
+}
+
+document.getElementById('cancel').onclick = () => parent.postMessage({
+    pluginMessage: {
+        type: 'cancel'
+    }
+}, '*')
+</script>
