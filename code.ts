@@ -98,7 +98,10 @@ const messages: Record<Message['type'], (msg: Message) => void> = {
         const primarySelectionObj = selection[0];
 
         const offset: number = msg.radOffset;
-        const center: Vector2 = getSelectionCenter(selection);
+        const center: Vector2 = {
+            x: primarySelectionObj.x,
+            y: primarySelectionObj.y
+        };
         const angleIncrement = (360 / msg.count) + msg.radOffset;
 
         const objs: SceneNode[] = [];
