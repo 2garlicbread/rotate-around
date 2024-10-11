@@ -33,6 +33,7 @@ const getPositionAroundCircle = (center: Vector2, radius: number, angle: number)
     };
 }
 
+// stole this from github somewhere, can't find source.
 function setRotation(node: any, angle: number){
     let { x, y, width, height, rotation } = node;
   
@@ -94,6 +95,8 @@ const messages: Record<Message['type'], (msg: Message) => void> = {
             return;
         }
 
+        const primarySelectionObj = selection[0];
+
         const offset: number = msg.radOffset;
         const center: Vector2 = getSelectionCenter(selection);
         const angleIncrement = (360 / msg.count) + msg.radOffset;
@@ -105,6 +108,8 @@ const messages: Record<Message['type'], (msg: Message) => void> = {
             const position = getPositionAroundCircle(center, msg.radius, angle);
             selection.forEach(obj => {
                 const clone = obj.clone();
+                // set position to parent, so positioning is relative.
+                (primarySelectionObj.parent || figma.currentPage).appendChild(clone);
                 
                 clone.x = position.x;
                 clone.y = position.y;
@@ -114,9 +119,10 @@ const messages: Record<Message['type'], (msg: Message) => void> = {
                 objs.push(clone);
             });
         }
-        
-        figma.group(objs, figma.currentPage);        
-        figma.closePlugin();
+
+        // group and set parent (again).
+        figma.group(objs, primarySelectionObj.parent || figma.currentPage);
+        figma.notify("sucessfully created object.")
     },
 
     "cancel": () => {
