@@ -102,7 +102,7 @@ const messages: Record<Message['type'], (msg: Message) => void> = {
             x: primarySelectionObj.x,
             y: primarySelectionObj.y
         };
-        const angleIncrement = (360 / msg.count) + msg.radOffset;
+        const angleIncrement = (360 / msg.count);
 
         const objs: SceneNode[] = [];
 
@@ -126,6 +126,7 @@ const messages: Record<Message['type'], (msg: Message) => void> = {
         // group and set parent (again).
         figma.group(objs, primarySelectionObj.parent || figma.currentPage);
         figma.notify("sucessfully created object.")
+        figma.closePlugin();
     },
 
     "cancel": () => {
